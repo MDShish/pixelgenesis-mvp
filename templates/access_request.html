@@ -6,98 +6,118 @@
 
   <style>
     body {
-      background: #fdfdfd;
+      background: #f7f9fc;
       color: #222;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
 
     h2 {
       color: #0a2540;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 28px;
     }
 
     .section-box {
-      background: #ffffff;
-      padding: 18px;
+      background: #fbfdff;
+      padding: 18px 20px;
       border-radius: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #d1d5db; /* light grey */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 22px;
+      border: 1px solid #d7e2f2;
     }
 
     .label-title {
       font-weight: 600;
       margin-bottom: 8px;
       display: block;
-      color: #1f2937; /* dark grey */
+      color: #1e293b;
+      font-size: 15px;
     }
 
-    select, input[type="text"], input[type="number"], input[type="file"] {
+    select, input[type="text"], input[type="number"], input[type="file"], input[type="date"] {
       width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1; /* border grey */
-      margin-bottom: 10px;
-      font-size: 14px;
-      background: #fafafa;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #f9fafb;
+      font-size: 15px;
+      transition: 0.25s;
     }
 
     select:focus, input:focus {
-      border-color: #3b82f6; /* blue focus */
-      outline: none;
+      border-color: #2563eb;
       background: #ffffff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(37,99,235,0.3);
     }
 
     .encrypt-box {
-      background: #e7f2ff;
+      background: #e3efff;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid #93c5fd;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     small {
       color: #6b7280;
       display: block;
-      margin-top: 5px;
+      margin-top: 8px;
+      font-size: 13px;
     }
 
-    /* BUTTON FIX */
-    .btn {
-      display: inline-block;
-      background: #2563eb;   /* blue */
-      color: white !important;
-      padding: 10px 18px;
-      border-radius: 8px;
-      text-decoration: none;
+    .error {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 18px;
       font-weight: 600;
-      margin-right: 10px;
-      transition: 0.2s;
-    }
-
-    .btn:hover {
-      background: #1e40af;  /* dark blue */
+      font-size: 14px;
     }
 
     button[type="submit"] {
-      background: #16a34a; /* green */
+      background: #16a34a;
       border: none;
       color: white;
-      padding: 12px 22px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: 16px;
       width: 100%;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 4px 15px rgba(16,185,129,0.3);
     }
 
     button[type="submit"]:hover {
       background: #0f7a36;
     }
 
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding-top: 20px;
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white !important;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: 0.25s;
     }
+
+    .btn:hover { background: #1e40af; }
   </style>
 
 </head>
@@ -113,67 +133,75 @@
 
 <form method="POST" enctype="multipart/form-data">
 
-  <!-- MODE SELECTOR -->
+  <!-- MODE SELECT -->
   <div class="section-box">
-    <label class="label-title">Select Mode:</label>
+    <label class="label-title">Select Mode</label>
     <select name="mode" id="mode_select" onchange="onModeChange()">
-      <option value="value">Mode A — Share Specific Field</option>
+      <option value="value">Mode A — Share User Field</option>
       <option value="predicate">Mode B — Predicate Check</option>
-      <option value="file">Mode C — Upload File → IPFS (Encrypted Optional)</option>
+      <option value="file">Mode C — File Upload (Optional Encryption)</option>
     </select>
   </div>
 
-  <!-- MODE A: VALUE -->
+  <!-- MODE A -->
   <div id="value_block" class="section-box">
-    <label class="label-title">Select Field:</label>
+    <label class="label-title">Select User Field</label>
     <select name="field">
-      <option value="name">Name</option>
-      <option value="dob">Date of Birth</option>
-      <option value="gender">Gender</option>
-      <option value="aadhaar_hash">Aadhaar Hash</option>
+      <option value="" disabled selected>Select field</option>
+      <option value="name">👤 Full Name</option>
+      <option value="dob">🎂 Date of Birth</option>
+      <option value="gender">⚧ Gender</option>
+      <option value="aadhaar_hash">🔐 Aadhaar Hash</option>
     </select>
-    <small>Only whitelisted fields can be shared.</small>
   </div>
 
   <!-- MODE B: PREDICATE -->
   <div id="predicate_block" class="section-box" style="display:none;">
-    <label class="label-title">Predicate Field</label>
-    <input type="text" name="pred_field" placeholder="e.g. age, gender, dob">
 
-    <label class="label-title">Condition</label>
-    <select name="op">
-      <option value="gt">Greater than (gt)</option>
-      <option value="ge">Greater or equal (ge)</option>
-      <option value="eq">Equal (eq)</option>
-      <option value="in">Contains / In (in)</option>
+    <label class="label-title">Predicate Field</label>
+    <select name="pred_field" id="pred_field" onchange="onPredicateFieldChange()">
+      <option value="" disabled selected>Select field</option>
+      <option value="age">Age</option>
+      <option value="gender">Gender</option>
+      <option value="aadhaar_hash">Aadhaar Hash</option>
+      <option value="dob">Date of Birth</option>
+      <option value="name">Name</option>
     </select>
 
-    <label class="label-title">Compare Value</label>
-    <input type="text" name="pred_value" placeholder="e.g. 18 / male / BLR">
+    <label class="label-title">Condition</label>
+    <select name="op" id="pred_op">
+      <option value="gt">Greater Than (>)</option>
+      <option value="ge">Greater or Equal (≥)</option>
+      <option value="eq">Equal (=)</option>
+      <option value="in">Contains (in)</option>
+    </select>
 
-    <small>Example: age > 18 OR gender == male</small>
+    <label class="label-title">Comparison Value</label>
+    <div id="pred_value_wrapper">
+      <input type="text" name="pred_value" id="pred_value">
+    </div>
+
+    <small>Examples: <b>age ≥ 18</b>, <b>gender = male</b>, <b>aadhaar_hash contains 'abc'</b></small>
   </div>
 
   <!-- MODE C: FILE UPLOAD -->
   <div id="file_block" class="section-box" style="display:none;">
-    <label class="label-title">Upload File:</label>
-    <input type="file" name="file">
+    <label class="label-title">Upload File</label>
+    <input type="file" name="file" id="file_input">
 
     <div class="encrypt-box">
       <label>
-        <input type="checkbox" name="encrypt">
-        🔐 Encrypt file before upload (AES-256 + Shamir 2-of-3 Shares)
+        <input type="checkbox" name="encrypt"> 🔐 Encrypt Before Upload (demo flag)
       </label>
+      <small>In this MVP, file is stored locally and linked with a token.</small>
     </div>
-
-    <small>Your file is encrypted locally before upload.</small>
   </div>
 
   <!-- TTL -->
   <div class="section-box">
     <label class="label-title">TTL (Time To Live)</label>
-    <input type="number" name="ttl_seconds" placeholder="300">
-    <small>0 = never expires | blank = default 300s</small>
+    <input type="number" name="ttl_seconds" placeholder="Default 300 seconds">
+    <small>0 = No expiry · Blank = Default 300s</small>
   </div>
 
   <button type="submit">Generate Token</button>
@@ -181,16 +209,70 @@
 </form>
 
 <br>
-<a class="btn" href="/">Home</a>
+<a class="btn" href="/">← Home</a>
 
 </div>
 
 <script>
-function onModeChange(){
+function onModeChange() {
   let m = document.getElementById("mode_select").value;
-  document.getElementById("value_block").style.display = (m==="value") ? "block" : "none";
-  document.getElementById("predicate_block").style.display = (m==="predicate") ? "block" : "none";
-  document.getElementById("file_block").style.display = (m==="file") ? "block" : "none";
+
+  document.getElementById("value_block").style.display      = (m === "value")     ? "block" : "none";
+  document.getElementById("predicate_block").style.display  = (m === "predicate") ? "block" : "none";
+  document.getElementById("file_block").style.display       = (m === "file")      ? "block" : "none";
+
+  // Required toggle for file
+  const fileInput = document.getElementById("file_input");
+  if (fileInput) {
+    fileInput.required = (m === "file");
+  }
+}
+
+function onPredicateFieldChange() {
+  let field   = document.getElementById("pred_field").value;
+  let wrapper = document.getElementById("pred_value_wrapper");
+  let op      = document.getElementById("pred_op");
+
+  wrapper.innerHTML = "";  // reset
+
+  // Reset operators to default
+  op.innerHTML = `
+    <option value="gt">Greater Than (>)</option>
+    <option value="ge">Greater or Equal (≥)</option>
+    <option value="eq">Equal (=)</option>
+    <option value="in">Contains (in)</option>
+  `;
+
+  if (field === "age") {
+    wrapper.innerHTML = '<input type="number" name="pred_value" min="0" placeholder="Enter age">';
+  } else if (field === "gender") {
+    wrapper.innerHTML = `
+      <select name="pred_value">
+        <option value="" disabled selected>Select gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>`;
+    op.value = "eq";
+    op.innerHTML = '<option value="eq">Equal (=)</option>';
+  } else if (field === "aadhaar_hash") {
+    wrapper.innerHTML = '<input type="text" name="pred_value" placeholder="Substring of hash">';
+    op.value = "in";
+    op.innerHTML = '<option value="in">Contains (in)</option>';
+  } else if (field === "dob") {
+    wrapper.innerHTML = '<input type="date" name="pred_value">';
+    op.innerHTML = `
+      <option value="eq">Equal (=)</option>
+      <option value="gt">Greater Than (>)</option>
+      <option value="ge">Greater or Equal (≥)</option>
+    `;
+  } else if (field === "name") {
+    wrapper.innerHTML = '<input type="text" name="pred_value" placeholder="Enter name">';
+    op.innerHTML = `
+      <option value="eq">Equal (=)</option>
+      <option value="in">Contains (in)</option>
+    `;
+  }
 }
 </script>
 

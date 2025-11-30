@@ -2,37 +2,173 @@
 <html>
 <head>
   <title>Active Tokens</title>
-  <link rel="stylesheet" href="/static/style.css">
 
   <style>
+      /* ==================================================
+         🌌 CYBER AURORA BACKGROUND
+      ================================================== */
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: "Poppins", sans-serif;
+          background: linear-gradient(135deg, #0e1526, #16213e, #0d1b2a);
+          background-size: 300% 300%;
+          animation: bgMove 12s ease infinite alternate;
+          color: #eef4ff;
+          overflow-x: hidden;
+      }
+      @keyframes bgMove {
+          0% { background-position: 0% 60%; }
+          50% { background-position: 100% 40%; }
+          100% { background-position: 0% 60%; }
+      }
+
+      /* Floating neon glows */
+      .glow {
+          position: fixed;
+          width: 480px;
+          height: 480px;
+          background: radial-gradient(circle, rgba(77,143,255,0.35), rgba(0,0,0,0));
+          filter: blur(110px);
+          border-radius: 50%;
+          z-index: -1;
+          animation: float 11s ease-in-out infinite alternate;
+      }
+      .glow:nth-child(1) { top: -110px; left: -90px; }
+      .glow:nth-child(2) { bottom: -120px; right: -80px; animation-delay: 2s; }
+
+      @keyframes float {
+          from { transform: translate(0,0) scale(1); }
+          to   { transform: translate(50px,50px) scale(1.25); }
+      }
+
+      /* ==================================================
+         🧊 GLASS CONTAINER
+      ================================================== */
+      .container {
+          width: 95%;
+          max-width: 1200px;
+          margin: 80px auto;
+          padding: 40px;
+          background: rgba(255,255,255,0.06);
+          border-radius: 26px;
+          backdrop-filter: blur(18px);
+          box-shadow: 0 12px 45px rgba(0,0,0,0.55);
+          animation: fadeUp 0.8s ease-out;
+          position: relative;
+      }
+
+      /* Neon edge animation */
+      .container::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          padding: 2px;
+          border-radius: 26px;
+          background: linear-gradient(135deg, #4da3ff, #7c3cff, #ff3ccb, #ffa53c);
+          background-size: 350% 350%;
+          animation: borderRun 5.8s linear infinite;
+          -webkit-mask:
+              linear-gradient(#fff 0 0) content-box,
+              linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+                  mask-composite: exclude;
+      }
+
+      @keyframes borderRun {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+      }
+
+      @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(35px); }
+          to   { opacity: 1; transform: translateY(0); }
+      }
+
+      h2 {
+          text-align: center;
+          font-size: 34px;
+          font-weight: 800;
+          color: #ffffff;
+          margin-bottom: 10px;
+          text-shadow: 0 0 10px rgba(255,255,255,0.4);
+      }
+
+      /* ==================================================
+         ⚠️ MESSAGE BOXES
+      ================================================== */
+      .msg-box {
+          padding: 14px;
+          border-radius: 14px;
+          font-weight: 700;
+          text-align: center;
+          margin-bottom: 25px;
+          animation: fadeUp 0.6s ease-out;
+      }
+
+      .msg-success {
+          background: rgba(0,255,120,0.18);
+          border: 1px solid #4df58d;
+          color: #ceffe1;
+      }
+
+      .msg-error {
+          background: rgba(255,60,60,0.18);
+          border: 1px solid #ff6767;
+          color: #ffd4d4;
+      }
+
+      /* ==================================================
+         🧊 FUTURISTIC TABLE
+      ================================================== */
       table {
           width: 100%;
           border-collapse: collapse;
-          margin-top: 20px;
+          margin-top: 25px;
+          background: rgba(255,255,255,0.05);
+          border-radius: 14px;
+          overflow: hidden;
+          backdrop-filter: blur(10px);
       }
 
       th {
-          background: #1e88e5;
-          color: white;
-          padding: 10px;
+          background: rgba(77,163,255,0.35);
+          padding: 14px;
           text-align: left;
-          font-size: 15px;
+          font-size: 14px;
+          color: #eaf3ff;
+          text-transform: uppercase;
+          letter-spacing: 0.7px;
       }
 
       td {
-          padding: 10px;
-          border-bottom: 1px solid #dddddd;
+          padding: 14px;
           font-size: 14px;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+          color: #d9e7ff;
       }
 
-      tr:hover { background: #f5faff; }
+      tr {
+          transition: 0.25s;
+      }
 
+      tr:hover {
+          background: rgba(77,163,255,0.08);
+          transform: translateX(4px);
+      }
+
+      /* ==================================================
+         BADGES
+      ================================================== */
       .badge {
-          padding: 4px 8px;
+          padding: 6px 10px;
           border-radius: 6px;
-          color: white;
-          font-size: 12px;
-          font-weight: bold;
+          font-size: 11px;
+          font-weight: 700;
+          color: #fff;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
       }
 
       .mode-value { background: #43a047; }
@@ -40,33 +176,62 @@
       .mode-file { background: #3949ab; }
 
       .revoked-badge { background: #d32f2f; }
-      .active-badge { background: #43a047; }
+      .active-badge { background: #1cc88a; }
 
+      /* ==================================================
+         REVOKE BUTTON
+      ================================================== */
       .btn-revoke {
-          background: #d32f2f;
-          color: white;
-          padding: 6px 12px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-      }
-      .btn-revoke:hover {
-          background: #b71c1c;
-      }
-
-      .msg-box {
-          padding: 12px;
+          background: linear-gradient(135deg, #ff4b4b, #c62828);
+          padding: 8px 14px;
           border-radius: 8px;
-          margin-bottom: 20px;
-          font-weight: bold;
+          border: none;
+          color: white;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 700;
+          transition: 0.25s ease;
+          box-shadow: 0 4px 15px rgba(255,50,50,0.4);
       }
-      .msg-success { background: #e9ffe9; border: 1px solid #7ed957; color: #1b7e26; }
-      .msg-error   { background: #ffecec; border: 1px solid #ff7070; color: #b30000; }
 
-      .small { font-size: 12px; color: #555; }
+      .btn-revoke:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 22px rgba(255,50,50,0.6);
+      }
+
+      /* ==================================================
+         EMPTY STATE
+      ================================================== */
+      .empty {
+          text-align: center;
+          padding: 35px;
+          font-size: 20px;
+          color: #d7e5ff;
+          background: rgba(255,255,255,0.05);
+          border-radius: 14px;
+          margin-top: 20px;
+      }
+
+      /* Home Link */
+      .home-link {
+          display: block;
+          margin-top: 25px;
+          text-align: center;
+          color: #7ab8ff;
+          font-weight: 700;
+          text-decoration: none;
+          font-size: 17px;
+      }
+      .home-link:hover {
+          color: #a8d4ff;
+      }
   </style>
+
 </head>
 <body>
+
+<div class="glow"></div>
+<div class="glow"></div>
 
 <div class="container">
 
@@ -78,6 +243,12 @@
   <div class="msg-box msg-error">❌ Token not found.</div>
 {% endif %}
 
+{% if tokens|length == 0 %}
+
+<div class="empty">No tokens have been generated yet.</div>
+
+{% else %}
+
 <table>
   <tr>
     <th>Token</th>
@@ -86,7 +257,7 @@
     <th>Value / Result</th>
     <th>Issued</th>
     <th>Expiry</th>
-    <th>Remaining</th>
+    <th>Time Left</th>
     <th>Status</th>
     <th>Revoked At</th>
     <th>Action</th>
@@ -106,21 +277,19 @@
         {% endif %}
       </td>
 
-      <td style="word-break: break-all;">{{ t.field }}</td>
-
+      <td>{{ t.field }}</td>
       <td style="word-break: break-all;">{{ t.value }}</td>
 
       <td>{{ t.issued }}</td>
-
       <td>{{ t.expiry }}</td>
 
       <td>
         {% if t.remaining == "Expired" %}
-          <span style="color:#d32f2f; font-weight:bold;">Expired</span>
+          <span class="badge revoked-badge">EXPIRED</span>
         {% elif t.remaining == "Never" %}
-          <span style="color:#3949ab; font-weight:bold;">Never</span>
+          <span class="badge mode-file">NEVER</span>
         {% else %}
-          <span style="color:#43a047; font-weight:bold;">{{ t.remaining }}</span>
+          <span class="badge active-badge">{{ t.remaining }}</span>
         {% endif %}
       </td>
 
@@ -136,10 +305,10 @@
 
       <td>
         {% if not t.revoked %}
-          <form method="POST" action="/revoke_token" style="margin:0;">
+        <form method="POST" action="{{ url_for('revoke_token') }}" style="margin:0;">
             <input type="hidden" name="token" value="{{ t.token }}">
             <button class="btn-revoke" type="submit">Revoke</button>
-          </form>
+        </form>
         {% else %}
           —
         {% endif %}
@@ -148,8 +317,9 @@
   {% endfor %}
 </table>
 
-<br>
-<a href="/">Home</a>
+{% endif %}
+
+<a href="/" class="home-link">🏠 Back to Home</a>
 
 </div>
 

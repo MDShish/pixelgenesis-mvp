@@ -1,60 +1,295 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DID Login</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>DID Login — PixelGenesis</title>
+
+    <!-- ============================
+         MAGIC GLASS + NEON UI
+    ============================== -->
+    <style>
+        /* --------------------------------------
+           ✨ BACKGROUND HOLOGRAPHIC UNIVERSE
+        --------------------------------------- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #070b1f, #0f1734, #1b2454);
+            background-size: 300% 300%;
+            animation: bgShift 12s ease-in-out infinite alternate;
+            color: #e6eeff;
+            overflow-x: hidden;
+        }
+
+        @keyframes bgShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating neon dust glows */
+        .glow {
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(94,163,255,0.25), transparent 70%);
+            filter: blur(80px);
+            animation: float 10s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        .glow:nth-child(1) { top: -120px; left: -110px; }
+        .glow:nth-child(2) { bottom: -130px; right: -120px; animation-delay: 3s; }
+
+        @keyframes float {
+            0%   { transform: translate(0,0) scale(1); }
+            100% { transform: translate(40px,40px) scale(1.25); }
+        }
+
+        /* --------------------------------------
+           ✨ GLASS CARD CONTAINER
+        --------------------------------------- */
+        .container {
+            width: 90%;
+            max-width: 650px;
+            margin: 100px auto;
+            padding: 45px;
+            border-radius: 25px;
+
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 45px rgba(0,0,0,0.55);
+
+            position: relative;
+            animation: fadeUp 0.7s ease-out;
+        }
+
+        /* Neon animated outline */
+        .container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            border-radius: 25px;
+            background: linear-gradient(130deg, #4da3ff, #8b48ff, #ff3ccb, #ffa53c);
+            background-size: 350% 350%;
+            animation: borderGlow 6s linear infinite;
+
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+        }
+
+        @keyframes borderGlow {
+            from { background-position: 0% 50%; }
+            to   { background-position: 100% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --------------------------------------
+           ✨ TEXT
+        --------------------------------------- */
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 12px rgba(255,255,255,0.4);
+        }
+
+        label {
+            font-size: 15px;
+            color: #cfe1ff;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .code-box {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #dfe8ff;
+            margin-bottom: 20px;
+            word-break: break-all;
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.08);
+        }
+
+        /* --------------------------------------
+           ✨ INPUT FIELDS
+        --------------------------------------- */
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 15px;
+            color: #ebf2ff;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            outline: none;
+            transition: 0.25s ease;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4da3ff;
+            box-shadow: 0 0 12px rgba(77,163,255,0.4);
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* --------------------------------------
+           ✨ ALERT BOXES
+        --------------------------------------- */
+        .error, .success {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .error {
+            background: rgba(255, 75, 75, 0.18);
+            border: 1px solid rgba(255,70,70,0.6);
+            color: #ffb8b8;
+        }
+
+        .success {
+            background: rgba(0,255,140,0.18);
+            border: 1px solid rgba(0,255,140,0.6);
+            color: #c8ffe2;
+            animation: glowPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes glowPulse {
+            0%   { box-shadow: 0 0 12px rgba(0,255,140,0.3); }
+            50%  { box-shadow: 0 0 24px rgba(0,255,140,0.6); }
+            100% { box-shadow: 0 0 12px rgba(0,255,140,0.3); }
+        }
+
+        /* --------------------------------------
+           ✨ MAGIC BUTTONS
+        --------------------------------------- */
+        .btn, button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(135deg, #4da3ff, #1c6ee8);
+            border: none;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 22px rgba(0,0,0,0.35);
+            text-decoration: none;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover, button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(78,163,255,0.7);
+        }
+
+        /* Ripple */
+        .btn::after, button::after {
+            content: "";
+            position: absolute;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.45s ease, height 0.45s ease;
+        }
+
+        .btn:hover::after, button:hover::after {
+            width: 260px;
+            height: 260px;
+        }
+
+        a {
+            color: #87c6ff;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            color: #add9ff;
+        }
+    </style>
 </head>
+
 <body>
+
+<!-- Floating neon blobs -->
+<div class="glow"></div>
+<div class="glow"></div>
 
 <div class="container">
 
     <h2>🔐 Login with DID</h2>
 
     {% if error %}
-      <div class="error">{{ error }}</div>
+        <div class="error">{{ error }}</div>
     {% endif %}
 
     {% if success %}
-      <div class="success">✅ Login Successful!</div>
+        <div class="success">🎉 Login Successful!</div>
 
-      <p><b>DID:</b></p>
-      <div class="code-box">{{ did }}</div>
+        <p><b>Your DID:</b></p>
+        <div class="code-box">{{ did }}</div>
 
-      <br>
-      <a class="btn" href="/access_request">Request Access Token</a>
-      <a class="btn" href="/">Home</a>
+        <a class="btn" href="/access_request">🎫 Generate Access Token</a>
+        <a class="btn" href="/">🏠 Home</a>
 
     {% elif step == "sign" %}
 
-      <p><b>DID:</b></p>
-      <div class="code-box">{{ did }}</div>
+        <p><b>Your DID:</b></p>
+        <div class="code-box">{{ did }}</div>
 
-      <p><b>Sign this challenge using your private key:</b></p>
-      <div class="code-box">{{ challenge }}</div>
+        <p><b>Sign this challenge:</b></p>
+        <div class="code-box">{{ challenge }}</div>
 
-      <form method="POST" action="/verify" class="mt-20">
-          <input type="hidden" name="did" value="{{ did }}">
-          <input type="hidden" name="challenge" value="{{ challenge }}">
+        <form action="/verify" method="POST">
+            <input type="hidden" name="did" value="{{ did }}">
+            <input type="hidden" name="challenge" value="{{ challenge }}">
 
-          <label>Paste Private Key:</label>
-          <input type="text" name="private_key" required>
+            <label>Enter Private Key:</label>
+            <input type="text" name="private_key" placeholder="Paste your private key…" required>
 
-          <button type="submit">Verify Signature</button>
-      </form>
+            <button type="submit">Verify Signature →</button>
+        </form>
 
-      <br>
-      <a href="/login">Back</a>
+        <a href="/login">← Back</a>
 
     {% else %}
 
-      <form method="POST">
-          <label>Enter DID:</label>
-          <input type="text" name="did" placeholder="did:pg:xxxx" required>
-          <button type="submit">Next</button>
-      </form>
+        <form method="POST">
+            <label>Enter DID</label>
+            <input type="text" name="did" placeholder="did:pg:xxxx…" required>
 
-      <br>
-      <a href="/">Home</a>
+            <button type="submit">Next →</button>
+        </form>
+
+        <a href="/">← Home</a>
 
     {% endif %}
 

@@ -2,43 +2,245 @@
 <html>
 <head>
     <title>Add User Data</title>
-    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* ==============================================================
+           🌌 CYBER AURORA BACKGROUND + FLOATING GLOW ORBS
+        ============================================================== */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(150deg, #0c1220, #18263d, #0e1628);
+            background-size: 300% 300%;
+            animation: bgShift 14s ease-in-out infinite alternate;
+            overflow-x: hidden;
+            color: #eef4ff;
+        }
+
+        @keyframes bgShift {
+            0% { background-position: 10% 30%; }
+            50% { background-position: 90% 70%; }
+            100% { background-position: 10% 30%; }
+        }
+
+        .glow {
+            position: fixed;
+            width: 460px;
+            height: 460px;
+            background: radial-gradient(circle, rgba(118,168,255,0.28), rgba(0,0,0,0));
+            filter: blur(95px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatGlow 12s ease-in-out infinite alternate;
+        }
+        .glow:nth-child(1) { top: -130px; left: -100px; }
+        .glow:nth-child(2) { bottom: -150px; right: -80px; animation-delay: 2s; }
+
+        @keyframes floatGlow {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(40px,40px) scale(1.22); }
+        }
+
+        /* ==============================================================
+           🧊 GLASS PANEL + HOLOGRAPHIC NEON BORDER
+        ============================================================== */
+        .container {
+            width: 92%;
+            max-width: 680px;
+            margin: 100px auto;
+            padding: 45px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 28px;
+            backdrop-filter: blur(14px);
+            position: relative;
+            box-shadow: 0 14px 45px rgba(0,0,0,0.55);
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            border-radius: 28px;
+            background: linear-gradient(135deg,
+                #4da3ff, #7c3cff, #ff3ccb, #ffa53c
+            );
+            background-size: 300% 300%;
+            animation: borderMove 5s linear infinite;
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+        }
+
+        @keyframes borderMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==============================================================
+           HEADINGS + TEXT
+        ============================================================== */
+        h2 {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #ffffff;
+            text-shadow: 0 0 12px rgba(255,255,255,0.4);
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 15px;
+            color: #bcd2ff;
+        }
+
+        /* ==============================================================
+           INPUT FIELDS (GLASS + NEON FOCUS)
+        ============================================================== */
+        label {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #dfe5ff;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #e8f0ff;
+            border-radius: 14px;
+            font-size: 15px;
+            margin-bottom: 22px;
+            outline: none;
+            transition: 0.3s ease;
+        }
+
+        input::placeholder { color: #9da9c9; }
+
+        input:focus, select:focus {
+            border-color: #5ab4ff;
+            box-shadow: 0 0 12px rgba(77,163,255,0.55);
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        select { cursor: pointer; }
+
+        /* ==============================================================
+           MAGICAL NEON BUTTON (Ripple + Lift)
+        ============================================================== */
+        .btn {
+            width: 100%;
+            padding: 17px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #5ab4ff, #1f6df0);
+            background-size: 250% 250%;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.35s;
+            box-shadow: 0 6px 22px rgba(56,120,255,0.5);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            background-position: 100% 0;
+            box-shadow: 0 10px 30px rgba(78,163,255,0.75);
+        }
+
+        .btn::after {
+            content:"";
+            position:absolute;
+            width:0;
+            height:0;
+            border-radius:50%;
+            background: rgba(255,255,255,0.25);
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            transition:0.45s ease;
+        }
+
+        .btn:hover::after {
+            width:280px;
+            height:280px;
+        }
+
+        /* ==============================================================
+           HOME LINK
+        ============================================================== */
+        a {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: #8ec5ff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        a:hover {
+            color: #cde4ff;
+            text-shadow: 0 0 12px rgba(150,200,255,0.5);
+        }
+    </style>
 </head>
+
 <body>
+
+<div class="glow"></div>
+<div class="glow"></div>
 
 <div class="container">
 
     <h2>👤 Add User Profile</h2>
-    <p class="subtitle">This data will be hashed & used for selective disclosure.</p>
-
-    {% if error %}
-      <div class="error">{{ error }}</div>
-    {% endif %}
+    <p class="subtitle">Your Aadhaar number is never stored — only a secure SHA-256 hash is saved.</p>
 
     <form method="POST">
 
-        <label>Full Name:</label>
-        <input type="text" name="name" required>
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Enter your full name" required>
 
-        <label>Date of Birth:</label>
+        <label>Date of Birth</label>
         <input type="date" name="dob" required>
 
-        <label>Gender:</label>
+        <label>Gender</label>
         <select name="gender" required>
-            <option value="">Select</option>
-            <option>male</option>
-            <option>female</option>
-            <option>other</option>
+            <option value="">Select gender...</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+            <option value="other">other</option>
         </select>
 
-        <label>Aadhaar Number:</label>
-        <input type="text" name="aadhaar" minlength="12" maxlength="12" placeholder="12-digit" required>
+        <label>Aadhaar Number</label>
+        <input type="text" name="aadhaar" minlength="12" maxlength="12"
+               placeholder="Enter 12-digit Aadhaar" required>
 
-        <button type="submit">Save Profile</button>
+        <button class="btn" type="submit">Save Profile</button>
+
     </form>
 
-    <br>
-    <a href="/">Home</a>
+    <a href="/">🏠 Go Home</a>
 
 </div>
 

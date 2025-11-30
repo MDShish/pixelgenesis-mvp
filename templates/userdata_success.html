@@ -1,29 +1,231 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Data Stored</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>User Profile Saved</title>
+
+    <style>
+        /* =======================================================
+           🌌 CYBER AURORA + FLOATING NEON GLOWS
+        ======================================================= */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(145deg, #0e1628, #1a2742, #0c1220);
+            background-size: 300% 300%;
+            animation: bgShift 14s ease-in-out infinite alternate;
+            color: #eef4ff;
+            overflow-x: hidden;
+        }
+
+        @keyframes bgShift {
+            0% { background-position: 10% 40%; }
+            50% { background-position: 90% 60%; }
+            100% { background-position: 10% 40%; }
+        }
+
+        .glow {
+            position: fixed;
+            width: 460px;
+            height: 460px;
+            background: radial-gradient(circle, rgba(118,168,255,0.28), rgba(0,0,0,0));
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatGlow 11s ease-in-out infinite alternate;
+        }
+        .glow:nth-child(1) { top: -120px; left: -80px; }
+        .glow:nth-child(2) { bottom: -140px; right: -80px; animation-delay: 2s; }
+
+        @keyframes floatGlow {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(40px,40px) scale(1.25); }
+        }
+
+        /* =======================================================
+           🧊 GLASS CONTAINER + HOLOGRAPHIC BORDER
+        ======================================================= */
+        .container {
+            width: 92%;
+            max-width: 680px;
+            margin: 100px auto;
+            padding: 45px;
+            border-radius: 28px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(15px);
+            position: relative;
+            animation: fadeUp 0.8s ease-out;
+            box-shadow: 0 12px 45px rgba(0,0,0,0.55);
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            border-radius: 28px;
+            background: linear-gradient(135deg,#4da3ff,#7c3cff,#ff3ccb,#ffa53c);
+            background-size: 350% 350%;
+            animation: borderFlow 6s linear infinite;
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =======================================================
+           HEADINGS + SUCCESS BADGE
+        ======================================================= */
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 18px;
+            text-shadow: 0 0 12px rgba(255,255,255,0.4);
+        }
+
+        .success-box {
+            background: rgba(70,200,120,0.22);
+            border: 1px solid #48e07a;
+            padding: 14px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #cfffdf;
+            font-weight: 700;
+            animation: fadeUp 1s ease-out;
+        }
+
+        /* =======================================================
+           FIELD DISPLAY BOXES
+        ======================================================= */
+        .field-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #d3dcff;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        .value-box {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 13px;
+            border-radius: 14px;
+            font-size: 15px;
+            color: #e7f0ff;
+            word-break: break-word;
+            transition: 0.25s;
+        }
+
+        .value-box:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+
+        .value-box.hash {
+            border-color: #ff6b6b;
+            color: #ffb3b3;
+            text-shadow: 0 0 6px rgba(255,120,120,0.3);
+        }
+
+        .note {
+            font-size: 13px;
+            color: #bcd2ff;
+            margin-top: 10px;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        /* =======================================================
+           MAGICAL NEON BUTTONS
+        ======================================================= */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 14px;
+            margin-top: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            background: linear-gradient(135deg,#4da3ff,#1c6ee8);
+            background-size: 220% 220%;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 22px rgba(0,0,0,0.35);
+            transition: 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            background-position: 100% 0;
+            box-shadow: 0 8px 28px rgba(78,163,255,0.75);
+        }
+
+        .btn::after {
+            content:"";
+            position:absolute;
+            width:0; height:0;
+            border-radius:50%;
+            background: rgba(255,255,255,0.25);
+            top:50%; left:50%;
+            transform:translate(-50%,-50%);
+            transition:0.45s ease;
+        }
+
+        .btn:hover::after {
+            width:260px; height:260px;
+        }
+    </style>
 </head>
+
 <body>
+
+<div class="glow"></div>
+<div class="glow"></div>
 
 <div class="container">
 
-    <div class="success">✅ User Profile Saved Successfully!</div>
-
-    <p><b>Name:</b> {{ name }}</p>
-    <p><b>Date of Birth:</b> {{ dob }}</p>
-    <p><b>Gender:</b> {{ gender }}</p>
-
-    <div class="hash-box">
-        <h3>🔐 Aadhaar SHA-256 Hash:</h3>
-        <p class="mono">{{ aadhaar_hash }}</p>
-        <small>This hashed Aadhaar is used for privacy-preserving verifications.</small>
+    <h2>✅ Profile Saved Securely</h2>
+    <div class="success-box">
+        Your encrypted profile has been stored successfully.
     </div>
 
-    <br>
+    <div class="field-title">Full Name:</div>
+    <div class="value-box">{{ name or "—" }}</div>
 
-    <a class="btn" href="/">Go Home</a>
-    <a class="btn" href="/access_request">Generate Token</a>
+    <div class="field-title">Date of Birth:</div>
+    <div class="value-box">{{ dob or "—" }}</div>
+
+    <div class="field-title">Gender:</div>
+    <div class="value-box">{{ gender or "—" }}</div>
+
+    <div class="field-title">🔐 Aadhaar SHA-256 Hash:</div>
+    <div class="value-box hash">{{ aadhaar_hash or "—" }}</div>
+
+    <p class="note">Your Aadhaar number is not stored — only a one-way hash for ZK verification.</p>
+
+    <a class="btn" href="/">🏠 Go Home</a>
+    <a class="btn" href="/access_request">🎫 Generate Access Token</a>
 
 </div>
 

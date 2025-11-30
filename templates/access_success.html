@@ -5,73 +5,186 @@
   <link rel="stylesheet" href="/static/style.css">
 
   <style>
-    .info-box {
-      background: #f7faff;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #c9dffc;
-      margin-bottom: 20px;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #1b263b, #0d1b2a);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      margin: 80px auto;
+      background: rgba(30,30,50,0.85);
+      padding: 40px 35px;
+      border-radius: 22px;
+      color: #eef4ff;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+      position: relative;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     .success {
-      background: #e9ffe9;
-      padding: 12px;
-      border: 1px solid #7ed957;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: #1b7e26;
+      background: rgba(56, 222, 156, 0.22);
+      border: 1px solid #4ade80;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      font-weight: 700;
+      color: #bbf7d0;
+      text-align: center;
+      font-size: 16px;
     }
 
-    .share-box {
-      background: #fff8e6;
-      border: 1px solid #f1d08b;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
+    h2 {
+      text-align: center;
+      margin-bottom: 16px;
+      color: #ffffff;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .info-box {
+      background: rgba(15,23,42,0.9);
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid #475569;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #cbd5f5;
+      margin-bottom: 6px;
+      display: block;
     }
 
     code {
-      background: #efefef;
-      padding: 4px 6px;
-      border-radius: 4px;
-      display: inline-block;
-      font-size: 14px;
+      display: block;
+      background: rgba(15,23,42,0.95);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.8);
+      font-size: 13px;
       word-break: break-all;
+      color: #e2e8f0;
     }
 
-    ul { margin-top: 10px; }
-  </style>
+    .share-box {
+      background: rgba(254, 249, 195, 0.06);
+      border-radius: 14px;
+      border: 1px solid #facc15;
+      padding: 16px 16px 12px;
+      margin-top: 18px;
+    }
 
+    .share-box h3 {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      color: #facc15;
+    }
+
+    .share-box p {
+      margin: 4px 0 10px 0;
+      font-size: 13px;
+      color: #fef9c3;
+    }
+
+    .share-box li {
+      margin-bottom: 6px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #5ab4ff, #1f6df0);
+      color: white;
+      text-decoration: none;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-right: 10px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 18px rgba(56,120,255,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(77,163,255,0.7);
+    }
+
+    .btn::after {
+      content:"";
+      position:absolute;
+      width:0; height:0;
+      border-radius:50%;
+      background: rgba(255,255,255,0.25);
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      transition:0.45s ease;
+    }
+
+    .btn:hover::after {
+      width:220px; height:220px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
 
-  <div class="success">🎉 Token Generated Successfully!</div>
+  <h2>🎫 Access Token Created</h2>
+  <div class="success">Token generated successfully!</div>
 
   <div class="info-box">
-    <p><b>Token:</b><br>
-      <code>{{ token }}</code>
-    </p>
+    <span class="label">Token:</span>
+    <code>{{ token }}</code>
 
-    <p><b>Field / Mode:</b> {{ field }}</p>
+    <br>
+
+    <span class="label">Field / Mode:</span>
+    <div style="font-size:14px; color:#e5e7eb;">
+      {{ field }}
+    </div>
 
     {% if extra %}
-      <p><b>CID:</b><br><code>{{ extra.cid }}</code></p>
-      <p><b>IPFS / Local URL:</b><br>
-        <a href="{{ extra.url }}" target="_blank">{{ extra.url }}</a>
-      </p>
+      <br>
+      <span class="label">File CID:</span>
+      <code>{{ extra.cid }}</code>
+
+      <span class="label" style="margin-top:8px;">File URL:</span>
+      <a href="{{ extra.url }}" target="_blank" style="color:#7dd3fc; font-size:14px;">
+        {{ extra.url }}
+      </a>
     {% endif %}
   </div>
 
-  <!-- 🔑 Shamir Secret Shares (only if encryption used) -->
   {% if shares %}
     <div class="share-box">
-      <h3>🔐 Shamir Secret Shares (Demo)</h3>
+      <h3>🔐 Shamir Key Shares (Demo)</h3>
       <p>
-        Your file was encrypted using AES-256.<br>
-        To recover the encryption key, ANY <b>2 out of these 3 shares</b> are enough.
+        Your file was "encrypted" with a demo AES-256 key.<br>
+        To reconstruct the key, you must use <b>SHARE-1</b> and <b>SHARE-2</b>.
+        (SHARE-3 is just a backup copy.)
       </p>
 
       <ul>
@@ -80,16 +193,17 @@
         {% endfor %}
       </ul>
 
-      <p style="margin-top:10px;">
-        Keep these shares safe — losing them means no one can decrypt the file 🔒
+      <p style="margin-top:8px; font-size:12px; opacity:0.9;">
+        Store these shares safely. Anyone with SHARE-1 and SHARE-2 can recover the AES key.
       </p>
     </div>
   {% endif %}
 
   <br>
 
-  <a class="btn" href="/verify_access">Verify Token</a>
-  <a class="btn" href="/tokens">View All Tokens</a>
+  <a class="btn" href="/verify_access">✅ Verify Token</a>
+  <a class="btn" href="/tokens">📑 View All Tokens</a>
+  <a class="btn" href="/">🏠 Home</a>
 
 </div>
 

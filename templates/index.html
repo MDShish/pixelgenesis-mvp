@@ -1,76 +1,231 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PixelGenesis MVP</title>
+    <title>PixelGenesis MVP — Cyber DID Layer</title>
     <link rel="stylesheet" href="/static/style.css">
+
     <style>
-        /* Extra override for clear visibility */
-        a {
-            color: #4DA8FF !important;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        a:hover {
-            color: #8BCCFF !important;
-            text-decoration: underline;
-        }
-
-        .home-card {
-            background: rgba(30,30,40,0.9);
-            border-radius: 18px;
-            padding: 35px;
-            max-width: 420px;
-            margin: 80px auto;
-            box-shadow: 0px 0px 25px rgba(0,0,0,0.4);
-        }
-
-        .home-title {
-            font-size: 27px;
-            font-weight: 700;
+        /* ===============================
+           GLOBAL BACKGROUND — GALACTIC NEBULA
+        =================================*/
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: radial-gradient(circle at 20% 20%, #131b33, #0b0f1c 70%);
+            overflow-x: hidden;
+            position: relative;
             color: #fff;
         }
 
+        /* Floating Galaxy Areas */
+        .nebula {
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0,181,255,0.18), rgba(0,0,0,0));
+            filter: blur(80px);
+            z-index: -3;
+            animation: nebulaMove 15s infinite alternate ease-in-out;
+        }
+        .nebula:nth-child(1) { top: -100px; left: -150px; }
+        .nebula:nth-child(2) { bottom: -150px; right: -100px; animation-delay: 4s; }
+        .nebula:nth-child(3) { top: 40%; left: 60%; width: 600px; height: 600px; animation-delay: 2s; }
+
+        @keyframes nebulaMove {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(50px) rotate(10deg) scale(1.15); }
+        }
+
+        /* ===============================
+           FLOATING DOT PARTICLES
+        =================================*/
+        .particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: drift 14s infinite ease-in-out;
+            filter: blur(1px);
+        }
+
+        @keyframes drift {
+            from { transform: translateY(0px); opacity: 0.3; }
+            to { transform: translateY(-50px); opacity: 0.9; }
+        }
+
+        /* ===============================
+           MAIN CARD — GLASS + NEON
+        =================================*/
+        .home-card {
+            width: 90%;
+            max-width: 540px;
+            margin: 100px auto;
+            padding: 45px 40px;
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 28px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.15);
+
+            box-shadow: 0 0px 30px rgba(0, 0, 0, 0.55),
+                        0 0px 70px rgba(21, 116, 255, 0.25);
+
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.7s ease-out;
+        }
+
+        /* Animated Neon Flow Border */
+        .home-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            border-radius: 28px;
+
+            background: linear-gradient(135deg,
+                #1e90ff, #7b2ff7, #ff2ea3, #ffae00, #1e90ff);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                           linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+
+            animation: borderShift 5.5s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes borderShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===============================
+           TITLE & SUBTITLE
+        =================================*/
+        .home-title {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #4da3ff, #c86bff, #ff7de0);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
         .home-sub {
-            font-size: 15px;
-            color: #bbb;
-            margin-bottom: 25px;
-        }
-
-        ul.links-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        ul.links-list li {
-            margin: 10px 0;
             font-size: 16px;
+            color: #dce3f5;
+            line-height: 1.6;
+            margin-bottom: 35px;
         }
 
-        body {
-            background: radial-gradient(circle at top, #1b263b, #0d1b2a);
+        /* ===============================
+           BUTTONS — NEO CYBERPUNK
+        =================================*/
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 14px;
+            text-decoration: none;
+            color: white;
+
+            background: linear-gradient(135deg, #4da3ff, #1c6ee8);
+            box-shadow: 0 5px 25px rgba(33, 140, 255, 0.45);
+
+            position: relative;
+            overflow: hidden;
+            transition: 0.28s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 10px 30px rgba(33, 140, 255, 0.7);
+        }
+
+        /* Shine moving through button */
+        .action-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255,255,255,0.35),
+                transparent
+            );
+            transform: skewX(-20deg);
+            transition: 0.45s;
+        }
+
+        .action-btn:hover::after {
+            left: 120%;
         }
     </style>
 </head>
+
 <body>
 
+<!-- Nebula Background Layers -->
+<div class="nebula"></div>
+<div class="nebula"></div>
+<div class="nebula"></div>
+
+<!-- Random Floating Particles -->
+<script>
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        p.style.left = Math.random()*100 + "vw";
+        p.style.top = Math.random()*100 + "vh";
+        p.style.animationDuration = (8 + Math.random()*8) + "s";
+        document.body.appendChild(p);
+    }
+</script>
+
+<!-- MAIN CARD -->
 <div class="home-card">
-    
-    <div class="home-title">🌐 PixelGenesis — Decentralized Identity MVP</div>
+
+    <div class="home-title">🌐 PixelGenesis — DID ZK Layer</div>
+
     <div class="home-sub">
-        A lightweight demo for DID, selective disclosure, AES encryption, Shamir recovery & IPFS storage.
+        A zero-knowledge powered identity layer with DID login,  
+        selective disclosure, AES file encryption, Shamir key recovery,  
+        and trustless access tokens.
     </div>
 
-    <ul class="links-list">
+    <div class="btn-container">
+        <a class="action-btn" href="/signup">🆔 Create DID</a>
+        <a class="action-btn" href="/login">🔐 Login</a>
+        <a class="action-btn" href="/userdata">📄 Add User Data</a>
+        <a class="action-btn" href="/access_request">🎫 Generate Token</a>
+        <a class="action-btn" href="/verify_access">✅ Verify Token</a>
+        <a class="action-btn" href="/tokens">📑 Tokens List</a>
+        <a class="action-btn" href="/shamir/recover">🔑 Recover Key (Shamir)</a>
+        <a class="action-btn" href="/vc/sign">🖊 Sign VC</a>
+    </div>
 
-        <li>🆔 <a href="/signup">Create DID</a></li>
-        <li>🔐 <a href="/login">Login</a></li>
-        <li>📄 <a href="/userdata">Add User Data</a></li>
-        <li>🎫 <a href="/access_request">Generate Token</a></li>
-        <li>✅<a href="/verify_access">Verify Token</a></li>
-        <li>📑 <a href="/tokens">Tokens List</a></li>
-        <li>🔑 <a href="/shamir/recover">Recover Key (Shamir)</a></li>
-        <li>🖊 <a href="/vc/sign">Sign VC</a></li>
-
-    </ul>
 </div>
 
 </body>
